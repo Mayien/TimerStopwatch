@@ -1,24 +1,18 @@
 package se.randiga.timerstopwatch;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
-
-import android.app.Activity;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v13.app.FragmentPagerAdapter;
-import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,6 +23,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class MainActivity extends Activity implements ActionBar.TabListener, Handler.Callback, TimerService.TimerCallback, StopWatchService.StopwatchCallback {
 
@@ -134,16 +134,36 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Han
         bindService(new Intent(this, StopWatchService.class),
                 mStopwatchServiceConnection, BIND_AUTO_CREATE);
 
+        ListView lapList = (ListView) findViewById(R.id.laplist);
+        value = (TextView) findViewById(R.id.stopwatch_value);
+        lapArray = new ArrayList<String>();
+
+        adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, lapArray);
+        lapList.setAdapter(adapter);
+
+
+
     }
 
     @Override
-    protected  void onPause() {
+    protected void onPause() {
+
         super.onPause();
 
-        mTimerService.setTimerCallback(null);
-        unbindService(mTimerServiceConnection);
-        mStopwatchService.setStopwatchCallback(null);
-        unbindService(mStopwatchServiceConnection);
+        System.out.print(mTimerService);
+
+        /*
+        if(mTimerService != null && mStopwatchService != null){
+
+            mTimerService.setTimerCallback(null);
+            unbindService(mTimerServiceConnection);
+
+            mStopwatchService.setStopwatchCallback(null);
+            unbindService(mStopwatchServiceConnection);
+        }
+
+        */
+
     }
 
 
@@ -153,12 +173,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener, Han
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
-        ListView lapList = (ListView) findViewById(R.id.laplist);
-        value = (TextView) findViewById(R.id.stopwatch_value);
-        lapArray = new ArrayList<String>();
 
-        adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, lapArray);
-        lapList.setAdapter(adapter);
+
         return true;
     }
 

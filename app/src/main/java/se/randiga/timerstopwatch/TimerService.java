@@ -178,10 +178,8 @@ public class TimerService extends Service implements Handler.Callback {
             timerAlarm.play();
 
             Runnable mMyRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    timerAlarm.stop();
-                }
+              @Override
+                public void run() {timerAlarm.stop();}
             };
 
             Handler mStopAlarmHandler = new Handler();
